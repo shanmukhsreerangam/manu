@@ -1,16 +1,26 @@
-version: 2.1
-
+version: 2
 jobs:
   build:
-    working_directory: ~/circleci-python
     docker:
-      - image: "circleci/python:3.6.4"
+      - image: cimg/python:3.10.2
     steps:
       - checkout
-      - run: python3 main.py
+      - run:
+          name: Install pip packages
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - run:
+          name: Test with pytest
+          command: |
+            . venv/bin/activate
+            pytest
+
   deploy:
     docker:
-      - image:  "circleci/python:3.6.4"
+      - image: cimg/base:2022.06
     steps:
       - checkout
       - setup_remote_docker:
@@ -22,19 +32,11 @@ jobs:
             echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER_ID" --password-stdin
             docker push $DOCKER_HUB_USER_ID/$IMAGE_NAME:latest
 
-  test:
-    working_directory: ~/circleci-python
-    docker:
-      - image: "circleci/python:3.6.4"
-    steps:
-      - checkout
-      - run: python3 main1.py
-
 workflows:
-  build_and_test:
+  version: 2
+  build-master:
     jobs:
       - build
-      - test:
+      - deploy:
           requires:
             - build
-      - deploy
