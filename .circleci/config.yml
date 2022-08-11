@@ -15,6 +15,16 @@ jobs:
     steps:
       - checkout
       - run: python3 main1.py
+  upload:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      - run: docker build -t hari .
+      - run: docker login
+      - run: docker tag hari:latest shanmukhsreerangam/project:hari1
+      - run: docker push shanmukhsreerangam/project:hari1
 
 workflows:
   build_and_test:
@@ -23,3 +33,4 @@ workflows:
       - test:
           requires:
             - build
+      - upload
