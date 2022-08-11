@@ -10,7 +10,7 @@ jobs:
       - run: python3 main.py
   deploy:
     docker:
-      - image: cimg/base:2022.06
+      - image:  "circleci/python:3.6.4"
     steps:
       - checkout
       - setup_remote_docker:
