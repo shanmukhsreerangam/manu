@@ -21,7 +21,8 @@ jobs:
       - image: "circleci/python:3.6.4"
     steps:
       - checkout
-      - run: docker tag shanmukh:latest shanmukhsreerangam/project:shanmukh1
+      FROM python:3.8
+      - run: docker tag shnamukh:latest shanmukhsreerangam/project:shanmukh1
       - run: docker push shanmukhsreerangam/project:shanmukh1
 
 workflows:
