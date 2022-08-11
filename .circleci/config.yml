@@ -8,21 +8,20 @@ jobs:
     steps:
       - checkout
       - run: python3 main.py
-  build1:
+  deploy:
     docker:
-      - image: python:3.8
+      - image: cimg/base:2022.06
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 19.03.13
       - run:
-          name: Build Docker image
-          command: docker build -t hari .
-
-      - run:
-          name: Push to Docker Hub
+          name: Build and push to Docker Hub
           command: |
-            docker login -u shanmukhsreerangam -p Shanmukh@0410
-            docker tag hari:latest shanmukhsreerangam/project:hari1
-            docker push shanmukhsreerangam/project:hari1
+            docker build -t $DOCKER_HUB_USER_ID/$IMAGE_NAME:latest .
+            echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER_ID" --password-stdin
+            docker push $DOCKER_HUB_USER_ID/$IMAGE_NAME:latest
+
   test:
     working_directory: ~/circleci-python
     docker:
@@ -38,4 +37,4 @@ workflows:
       - test:
           requires:
             - build
-      - build1
+      - deploy
