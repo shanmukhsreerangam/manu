@@ -21,10 +21,9 @@ jobs:
       - image: "circleci/python:3.6.4"
     steps:
       - checkout
-      - run: docker build -t hari .
       - run: docker login
-      - run: docker tag hari:latest shanmukhsreerangam/project:hari1
-      - run: docker push shanmukhsreerangam/project:hari1
+      - run: docker tag hari:latest shanmukhsreerangam/project:shanmukh1
+      - run: docker push shanmukhsreerangam/project:shanmukh1
 
 workflows:
   build_and_test:
