@@ -2,7 +2,7 @@
 from main import Add
 
 def TestAdd():
-        assert Add(2,3) == 65
+        assert Add(2,3) == 5
         assert Add(5,5) == 10
         print("adding successfull")
 
